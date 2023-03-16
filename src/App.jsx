@@ -9,22 +9,24 @@ import { MantineProvider } from "@mantine/core";
 import Users from "./views/admin/Users";
 import Annonce from "./views/admin/Annonce";
 import Category from "./views/admin/Category";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <BrowserRouter>
       <MantineProvider>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Login />} />
-            <Route path="admin" element={<AdminMain />}>
-              <Route path="users" element={<Users />} />
-              <Route index element={<Annonce />} />
-              <Route path="categories" element={<Category />} />
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Login />} />
+              <Route path="admin" element={<AdminMain />}>
+                <Route path="users" element={<Users />} />
+                <Route index element={<Annonce />} />
+                <Route path="categories" element={<Category />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
+          </Routes>
+        </Provider>
       </MantineProvider>
     </BrowserRouter>
   );
