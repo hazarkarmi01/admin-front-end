@@ -5,16 +5,12 @@ import {
   rem,
   Stack,
   Tooltip,
-  UnstyledButton,
+  UnstyledButton
 } from "@mantine/core";
 import {
-  IconDeviceDesktopAnalytics,
-  IconGauge,
-  IconHome2,
-  IconLogout,
+  IconArticle, IconGauge, IconLogout,
   IconSwitchHorizontal,
-  IconUsers,
-  IconArticle,
+  IconUsers
 } from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -48,9 +44,9 @@ function NavbarLink({ icon: Icon, label, active, onClick }) {
 }
 
 const mockdata = [
-  { icon: IconUsers, label: "Utilisateurs", linkTo: "/admin/users" },
+  { icon: IconUsers, label: "Utilisateurs", linkTo: "/admin" },
   { icon: IconGauge, label: "Categories", linkTo: "/admin/categories" },
-  { icon: IconArticle, label: "Annonces", linkTo: "/admin" },
+  { icon: IconArticle, label: "Annonces", linkTo: "/admin/annonces" },
 ];
 
 const AdminSideBar = () => {
@@ -71,7 +67,7 @@ const AdminSideBar = () => {
 
   return (
     <Navbar
-      height={750}
+      height={"100vh"}
       width={{ base: 80 }}
       p="md"
       sx={(theme) => ({

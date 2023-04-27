@@ -17,7 +17,7 @@ const getApi = async (url, config = {}) => {
 };
 const deleteApi = async (url, config = {}) => {
   try {
-    const { data } = await axios.get(`${BASE_URL}/${url}`, config);
+    const { data } = await axios.delete(`${BASE_URL}/${url}`, config);
     return data;
   } catch (error) {}
 };

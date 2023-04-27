@@ -1,8 +1,9 @@
-import { GET_ALL_USERS, SEARCH_USER } from "../actions/actionTypes";
+import { GET_ALL_USERS, SEARCH_USER, SET_SELECTED_USER } from "../actions/actionTypes";
 
 const usersInitState = {
   baseList: [],
   editList: [],
+  selectedUser: null
 };
 
 const UserReducer = (state = usersInitState, action) => {
@@ -18,6 +19,8 @@ const UserReducer = (state = usersInitState, action) => {
             ? state.baseList
             : state.baseList.filter((elm) => elm.firstName.includes(payload)),
       };
+    case SET_SELECTED_USER:
+      return { ...state, selectedUser: payload }
 
     default:
       return state;

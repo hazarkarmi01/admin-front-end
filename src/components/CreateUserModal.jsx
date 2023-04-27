@@ -1,9 +1,10 @@
 import { Modal, TextInput, Checkbox, Group, Button } from "@mantine/core";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createUserApi } from "../redux/actions/user.actions";
 
 const CreateUserModal = ({ handleClose, isOpen }) => {
+  const { token } = useSelector(({ auth }) => auth);
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -84,7 +85,7 @@ const CreateUserModal = ({ handleClose, isOpen }) => {
         <Button
           variant="outline"
           onClick={() => {
-            dispatch(createUserApi(userData));
+            dispatch(createUserApi(userData,token));
             handleClose();
           }}
         >

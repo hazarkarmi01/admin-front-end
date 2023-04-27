@@ -1,24 +1,28 @@
 import {
-  Paper,
-  Table,
-  Card,
-  Text,
-  TextInput,
-  Button,
-  Switch,
+  Button, Card, Paper, Switch, Table, TextInput
 } from "@mantine/core";
-import React, { useEffect } from "react";
-import { IconTrash, IconPencil } from "@tabler/icons-react";
-import CreateUserModal from "../../components/CreateUserModal";
 import { useDisclosure } from "@mantine/hooks";
+import { IconPencil, IconTrash } from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsersApi, searchUser } from "../../redux/actions/user.actions";
+import CreateUserModal from "../../components/CreateUserModal";
+import EditUserModal from "../../components/EditUserModal";
+import {
+  deleteUserApi,
+  getAllUsersApi,
+  searchUser,
+  setSelectedUser,
+  updateUserApi
+} from "../../redux/actions/user.actions";
 const Users = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [openedEdit, setOpenEdit] = useState(false);
   const dispatch = useDispatch();
   const { editList } = useSelector((state) => state.users);
+  const { token } = useSelector(({ auth }) => auth);
+
   useEffect(() => {
-    dispatch(getAllUsersApi());
+    dispatch(getAllUsersApi(token));
   }, []);
   return (
     <Paper style={{ display: "flex", width: "100%", flexDirection: "column" }}>
@@ -35,7 +39,7 @@ const Users = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "10px",
+            gap: "10px"
           }}
         >
           <TextInput
@@ -48,6 +52,12 @@ const Users = () => {
         </div>
         <Button onClick={() => open()}>Ajouter nouveau utilisateur</Button>
         <CreateUserModal isOpen={opened} handleClose={close} />
+        <EditUserModal
+          isOpen={openedEdit}
+          handleClose={() => {
+            setOpenEdit(false);
+          }}
+        />
       </Card>
       <Card p={"md"} shadow="md" m={"xs"}>
         <Table highlightOnHover withBorder>
@@ -75,13 +85,39 @@ const Users = () => {
                 <td>{elm.phoneNumber}</td>
                 <td>{elm.role}</td>
                 <td>
-                  <Switch value={elm.isActive} />
+                  <Switch
+                    checked={elm.isActive}
+                    onChange={(e) => {
+                      dispatch(
+                        updateUserApi(
+                          elm._id,
+                          {
+                            isActive
+                              : e.currentTarget.checked
+                          },
+                          token
+                        )
+                      );
+                    }}
+                  />
                 </td>
                 <td>
-                  <Button size={"sm"} mr="sm" color="red">
+                  <Button
+                    size={"sm"}
+                    mr="sm"
+                    color="red"
+                    onClick={() => {
+                      dispatch(deleteUserApi(elm._id, token));
+                    }}
+                  >
                     <IconTrash />
                   </Button>
-                  <Button size={"sm"} color="teal">
+                  <Button size={"sm"} color="teal" onClick={() => {
+                    dispatch(setSelectedUser(elm))
+                    setOpenEdit(true);
+
+
+                  }}>
                     <IconPencil />
                   </Button>
                 </td>
