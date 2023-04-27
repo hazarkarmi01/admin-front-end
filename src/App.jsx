@@ -2,7 +2,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import AdminMain from "./views/AdminMain";
-import Login from "./views/login";
+import Login from "./views/Login";
 
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
