@@ -1,17 +1,14 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./Layout/Layout";
-import Login from "./views/login";
 import AdminMain from "./views/AdminMain";
+import Login from "./views/login";
 
-import Users from "./views/admin/Users";
-import Annonce from "./views/admin/Annonce";
-import Category from "./views/admin/Category";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import AppGlobalStyles from "./components/AppGlobalStyles";
+import Annonce from "./views/admin/Annonce";
+import Category from "./views/admin/Category";
+import Users from "./views/admin/Users";
 function App() {
   return (
     <BrowserRouter>
