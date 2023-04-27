@@ -17,8 +17,8 @@ jobs:
           docker rm front-end || true
       - name: Remove unused Docker images and build cache
         run: |
-          docker image prune --force
-          docker builder prune --force --all
+          docker image prune --force || true
+          docker builder prune --force --all || true
       - name: Build Docker image
         run: docker build -t my-docker-image .
       - name: Run Docker container
