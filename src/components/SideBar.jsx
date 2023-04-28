@@ -86,7 +86,10 @@ const AdminSideBar = () => {
       <Navbar.Section>
         <Stack justify="center" spacing={0}>
           <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
-          <NavbarLink icon={IconLogout} label="Logout" />
+          <NavbarLink icon={IconLogout} label="Logout" onClick={() => {
+            localStorage.clear();
+            navigate('/')
+          }} />
         </Stack>
       </Navbar.Section>
     </Navbar>
