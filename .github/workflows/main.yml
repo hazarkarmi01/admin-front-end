@@ -13,8 +13,8 @@ jobs:
           ref: main
       - name: Stop and remove existing container
         run: |
-          docker stop front-end || true
-          docker rm front-end || true
+         sudo docker container stop front-end || true
+         sudo docker container rm front-end || true
       - name: Remove unused Docker images and build cache
         run: |
          sudo docker image prune --force || true
