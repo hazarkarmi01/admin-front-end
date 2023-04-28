@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:3500";
+export const BASE_URL = "https://13.82.2.24.nip.io/api";
 
 const postApi = async (url, body, config = {}) => {
   try {
