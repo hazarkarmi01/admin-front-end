@@ -92,7 +92,7 @@ const deleteSubCategory = (categId, parentId, token) => async (dispatch) => {
     let result = await deleteApi(`category/sub/${categId}`, config);
     if (result) {
       dispatch(getCategoryList(token));
-      dispatch(updateSelectedCategory(parentId, token));
+    dispatch(updateSelectedCategory(parentId, token));
     }
   } catch (error) {}
 };

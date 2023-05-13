@@ -22,6 +22,7 @@ function App() {
               <Route index element={<Users />} />
               <Route path="annonces" element={<Annonce />} />
               <Route path="categories" element={<Category />} />
+            
             </Route>
           </Route>
         </Routes>

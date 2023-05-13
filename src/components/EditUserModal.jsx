@@ -1,11 +1,12 @@
 import { Modal, TextInput, Checkbox, Group, Button } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createUserApi } from "../redux/actions/user.actions";
+import { createUserApi, updateUserApi } from "../redux/actions/user.actions";
 
 const EditUserModal = ({ handleClose, isOpen }) => {
     const { token } = useSelector(({ auth }) => auth);
-    const { selectedUser } = useSelector(({ users }) => users)
+    const { selectedUser } = useSelector(({ users }) => users);
+    const [isAdmin, setIsAdmin] = useState(false)
     const [userData, setUserData] = useState({
         firstName: "",
         lastName: "",
@@ -19,7 +20,14 @@ const EditUserModal = ({ handleClose, isOpen }) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
     };
     useEffect(() => {
-        console.log("Selected USer", selectedUser)
+        if (selectedUser) {
+            console.log("Selected USer", selectedUser);
+            if (selectedUser.role == "ADMIN") {
+                setIsAdmin(true)
+            } else {
+                setIsAdmin(false)
+            }
+        }
     }, [selectedUser])
     return (
         <Modal
@@ -28,55 +36,8 @@ const EditUserModal = ({ handleClose, isOpen }) => {
             title="Ajouter nouveau utilisateur"
             centered
         >
-            <TextInput
-                placeholder="Nom"
-                label="Nom"
-                withAsterisk
-                mb={"sm"}
-                name="firstName"
-                onChange={handleChange}
-            />
-            <TextInput
-                placeholder="Prénom"
-                label="Prénom"
-                withAsterisk
-                mb={"sm"}
-                name="lastName"
-                onChange={handleChange}
-            />
-            <TextInput
-                placeholder="Adresse"
-                label="Adresse"
-                withAsterisk
-                mb={"sm"}
-                name="address"
-                onChange={handleChange}
-            />
-            <TextInput
-                placeholder="Email"
-                label="Email"
-                withAsterisk
-                mb={"sm"}
-                name="email"
-                onChange={handleChange}
-            />
-            <TextInput
-                placeholder="Mot de passe"
-                label="Mot de passe"
-                withAsterisk
-                mb={"sm"}
-                name="password"
-                onChange={handleChange}
-            />
-            <TextInput
-                placeholder="Téléphone"
-                label="Téléphone"
-                withAsterisk
-                mb={"sm"}
-                name="phoneNumber"
-                onChange={handleChange}
-            />
-            <Checkbox label="Admin" mb={"sm"} />
+
+            <Checkbox label="Admin" mb={"sm"} checked={isAdmin} onChange={(e) => setIsAdmin(e.currentTarget.checked)} />
             <Group
                 mt="xl"
                 align={"flex-end"}
@@ -89,8 +50,10 @@ const EditUserModal = ({ handleClose, isOpen }) => {
                 <Button
                     variant="outline"
                     onClick={() => {
-                        dispatch(createUserApi(userData, token));
-                        handleClose();
+                        if (selectedUser) {
+                            dispatch(updateUserApi(selectedUser._id, { role: isAdmin ? "ADMIN" : "USER" }, token));
+                            handleClose();
+                        }
                     }}
                 >
                     Confirmer

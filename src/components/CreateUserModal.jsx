@@ -5,6 +5,7 @@ import { createUserApi } from "../redux/actions/user.actions";
 
 const CreateUserModal = ({ handleClose, isOpen }) => {
   const { token } = useSelector(({ auth }) => auth);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -72,7 +73,7 @@ const CreateUserModal = ({ handleClose, isOpen }) => {
         name="phoneNumber"
         onChange={handleChange}
       />
-      <Checkbox label="Admin" mb={"sm"} />
+      <Checkbox label="Admin" mb={"sm"} checked={isAdmin} onChange={(e) => setIsAdmin(e.currentTarget.checked)} />
       <Group
         mt="xl"
         align={"flex-end"}
@@ -85,7 +86,7 @@ const CreateUserModal = ({ handleClose, isOpen }) => {
         <Button
           variant="outline"
           onClick={() => {
-            dispatch(createUserApi(userData,token));
+            dispatch(createUserApi({...userData,isAdmin}, token));
             handleClose();
           }}
         >

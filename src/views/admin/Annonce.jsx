@@ -1,31 +1,36 @@
 import {
-  Button, Card, Paper, Switch, Table, TextInput
+  Button, Card, Flex, Paper,
+  TextInput
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CreateUserModal from "../../components/CreateUserModal";
-import EditUserModal from "../../components/EditUserModal";
+import AnnonceCard from "../../components/AnnonceCard";
+import AnnonceModal from "../../components/AnnonceModal";
+import { getAllAnnonceApi } from "../../redux/actions/annonce.actions";
 import {
-  deleteUserApi,
-  getAllUsersApi,
-  searchUser,
-  setSelectedUser,
-  updateUserApi
+  searchUser
 } from "../../redux/actions/user.actions";
 const Annonce = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [openedEdit, setOpenEdit] = useState(false);
-  const dispatch = useDispatch();
-  const { editList } = useSelector((state) => state.users);
-  const { token } = useSelector(({ auth }) => auth);
 
+  const dispatch = useDispatch();
+  const { editList } = useSelector((state) => state.annonce);
+  const { token } = useSelector(({ auth }) => auth);
+  const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
-    dispatch(getAllUsersApi(token));
+    dispatch(getAllAnnonceApi(token));
   }, []);
+  const handleOpenModal = () => {
+    setIsOpen(true);
+
+  }
+  const handleCloseModal = () => {
+    setIsOpen(false)
+  }
   return (
     <Paper style={{ display: "flex", width: "100%", flexDirection: "column" }}>
+      <AnnonceModal isOpen={isOpen} handleClose={handleCloseModal}/>
       <Card
         p="xl"
         shadow={"md"}
@@ -51,80 +56,14 @@ const Annonce = () => {
           <Button>Rechercher</Button>
         </div>
         <Button onClick={() => open()}>Ajouter nouveau utilisateur</Button>
-        <CreateUserModal isOpen={opened} handleClose={close} />
-        <EditUserModal
-          isOpen={openedEdit}
-          handleClose={() => {
-            setOpenEdit(false);
-          }}
-        />
+       
       </Card>
       <Card p={"md"} shadow="md" m={"xs"}>
-        <Table highlightOnHover withBorder>
-          <thead>
-            <tr>
-              <th>id</th>
-              <th>Nom & Prénom</th>
-              <th>Adresse</th>
-              <th>Email</th>
-              <th>Numéro Tel</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {editList.map((elm, ind) => (
-              <tr key={elm._id}>
-                <td>{ind + 1}</td>
-                <td>
-                  {elm.firstName} {elm.lastName}
-                </td>
-                <td>{elm.address}</td>
-                <td>{elm.email}</td>
-                <td>{elm.phoneNumber}</td>
-                <td>{elm.role}</td>
-                <td>
-                  <Switch
-                    checked={elm.isActive}
-                    onChange={(e) => {
-                      dispatch(
-                        updateUserApi(
-                          elm._id,
-                          {
-                            isActive
-                              : e.currentTarget.checked
-                          },
-                          token
-                        )
-                      );
-                    }}
-                  />
-                </td>
-                <td>
-                  <Button
-                    size={"sm"}
-                    mr="sm"
-                    color="red"
-                    onClick={() => {
-                      dispatch(deleteUserApi(elm._id, token));
-                    }}
-                  >
-                    <IconTrash />
-                  </Button>
-                  <Button size={"sm"} color="teal" onClick={() => {
-                    dispatch(setSelectedUser(elm))
-                    setOpenEdit(true);
-
-
-                  }}>
-                    <IconPencil />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Flex w={"100%"} h={"100%"} p={10} gap={10}>
+          {
+            editList.map((elm) => <AnnonceCard handleOpenModal={handleOpenModal} key={elm._id} annonce={elm} image={elm.photos[0]} category={elm.category.name} title={elm.title} date={elm.createdAt} author={`${elm.createdBy.firstName} ${elm.createdBy.lastName}`} />)
+          }
+        </Flex>
       </Card>
     </Paper>
   );
