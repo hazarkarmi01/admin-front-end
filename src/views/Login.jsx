@@ -11,15 +11,17 @@ import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { handleAuthApi } from "../redux/actions/auth.actions";
-
+import logo from '../assets/logo.png'
 
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    minHeight: rem(900),
-    backgroundSize: "cover",
+    minHeight: rem(700),
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPositionX: 500,
     backgroundImage:
-      "url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)",
+      "url('./assets/wallpaper.png')",
   },
 
   form: {
@@ -43,7 +45,7 @@ const useStyles = createStyles((theme) => ({
 const Login = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const form = useForm({
     initialValues: {
       email: '',
@@ -57,18 +59,16 @@ const Login = () => {
       password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
     },
   });
-  
+
 
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
         <form onSubmit={form.onSubmit((values) => {
           console.log("values", values)
-          dispatch(handleAuthApi(values,navigate)); 
+          dispatch(handleAuthApi(values, navigate));
         })}>
-          <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-            Bienvenue
-          </Title>
+          <img src={logo} style={{ width: 150, height: 150, margin: 10, justifySelf: 'center',marginLeft:120 }} />
 
           <TextInput
             required
@@ -82,8 +82,8 @@ const Login = () => {
 
           <PasswordInput
             required
-            label="Password"
-            placeholder="Your password"
+            label="Mot de passe"
+            placeholder="Votre mot de passe"
             value={form.values.password}
             onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
             error={form.errors.password && 'Mot de passe doit etre au moins 6 charactères'}
