@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Paper, TextInput } from "@mantine/core";
+import { Button, Card, Grid, Paper, TextInput, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,7 @@ import {
 } from "../../redux/actions/category.actions";
 import { searchUser } from "../../redux/actions/user.actions";
 import SubCategoryModal from "../../components/SubCategoryModal";
-
+import { modals } from '@mantine/modals'
 const Category = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [openedEdit, setOpenEdit] = useState(false);
@@ -79,7 +79,19 @@ const Category = () => {
                 subcategories={category.subCategories.length}
                 onEdit={() => console.log(`Edit category ${category.name}`)}
                 onDelete={() => {
-                  dispatch(deleteCategoryApi(category._id, token));
+                  const openModal = () => modals.openConfirmModal({
+                    title: 'Confirm',
+                    children: (
+                      <Text size="sm">
+                        Est ce que vous voulez supprimer cette categorie
+                      </Text>
+                    ),
+                    labels: { confirm: 'Confirmer', cancel: 'Annuler' },
+                    onCancel: () => console.log('Cancel'),
+                    onConfirm: () => dispatch(deleteCategoryApi(category._id, token)),
+                  });
+                  openModal()
+
                 }}
                 onHandleSub={() => handleManageSub(category)}
               />

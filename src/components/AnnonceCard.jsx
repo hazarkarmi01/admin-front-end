@@ -1,8 +1,8 @@
-import { createStyles, Card, Image, Avatar, Text, Group, Button } from "@mantine/core";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Card, Group, Image, Text, createStyles } from "@mantine/core";
+import { modals } from '@mantine/modals';
+import { useDispatch } from "react-redux";
 import { SET_SELECTED_ANNONCE } from "../redux/actions/actionTypes";
-import { useEffect, useState } from "react";
-
+import { deleteAnnonce } from '../redux/actions/annonce.actions'
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor:
@@ -24,7 +24,7 @@ const AnnonceCard = ({ image, category, title, date, author, annonce, handleOpen
     const { classes } = useStyles();
     const dispatch = useDispatch();
 
-    
+
     const handleSelect = () => {
         dispatch({
             type: SET_SELECTED_ANNONCE,
@@ -32,7 +32,7 @@ const AnnonceCard = ({ image, category, title, date, author, annonce, handleOpen
         });
         handleOpenModal();
     }
-    
+
     return (
         <Card withBorder radius="md" p={0} className={classes.card}>
             <Group noWrap spacing={0}>
@@ -58,7 +58,20 @@ const AnnonceCard = ({ image, category, title, date, author, annonce, handleOpen
                     </Group>
                     <Group position="apart" mt={10}>
                         <Button onClick={handleSelect}>Consulter</Button>
-                        <Button color="red">Supprimer</Button>
+                        <Button color="red" onClick={() => {
+                            const openModal = () => modals.openConfirmModal({
+                                title: 'Confirm',
+                                children: (
+                                    <Text size="sm">
+                                        Est ce que vous voulez supprimer cette Annonce
+                                    </Text>
+                                ),
+                                labels: { confirm: 'Confirmer', cancel: 'Annuler' },
+                                onCancel: () => console.log('Cancel'),
+                                onConfirm: () => dispatch(deleteAnnonce(elm._id, token)),
+                            });
+                            openModal()
+                        }}>Supprimer</Button>
                     </Group>
                 </div>
             </Group>

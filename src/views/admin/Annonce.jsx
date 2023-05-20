@@ -59,7 +59,7 @@ const Annonce = () => {
        
       </Card>
       <Card p={"md"} shadow="md" m={"xs"}>
-        <Flex w={"100%"} h={"100%"} p={10} gap={10}>
+        <Flex w={"100%"} h={"100%"} p={10} gap={10} wrap={"wrap"}>
           {
             editList.map((elm) => <AnnonceCard handleOpenModal={handleOpenModal} key={elm._id} annonce={elm} image={elm.photos[0]} category={elm.category.name} title={elm.title} date={elm.createdAt} author={`${elm.createdBy.firstName} ${elm.createdBy.lastName}`} />)
           }

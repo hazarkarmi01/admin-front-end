@@ -1,5 +1,5 @@
 import {
-  Button, Card, Paper, Switch, Table, TextInput
+  Button, Card, Paper, Switch, Table, TextInput, Text
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
@@ -14,6 +14,7 @@ import {
   setSelectedUser,
   updateUserApi
 } from "../../redux/actions/user.actions";
+import { modals } from '@mantine/modals';
 const Users = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [openedEdit, setOpenEdit] = useState(false);
@@ -107,7 +108,18 @@ const Users = () => {
                     mr="sm"
                     color="red"
                     onClick={() => {
-                      dispatch(deleteUserApi(elm._id, token));
+                      const openModal = () => modals.openConfirmModal({
+                        title: 'Confirm',
+                        children: (
+                          <Text size="sm">
+                            Est ce que vous voulez supprimer cet utilisateur
+                          </Text>
+                        ),
+                        labels: { confirm: 'Confirmer', cancel: 'Annuler' },
+                        onCancel: () => console.log('Cancel'),
+                        onConfirm: () => dispatch(deleteUserApi(elm._id, token)),
+                      });
+                      openModal()
                     }}
                   >
                     <IconTrash />
