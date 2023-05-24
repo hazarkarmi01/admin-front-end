@@ -5,12 +5,14 @@ import {
   rem,
   Stack,
   Tooltip,
-  UnstyledButton
+  UnstyledButton,
 } from "@mantine/core";
 import {
-  IconArticle, IconGauge, IconLogout,
+  IconArticle,
+  IconGauge,
+  IconLogout,
   IconSwitchHorizontal,
-  IconUsers
+  IconUsers,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +69,8 @@ const AdminSideBar = () => {
 
   return (
     <Navbar
-      height={"100vh"}
+      h={"100%"}
+      mih={"100vh"}
       width={{ base: 80 }}
       p="md"
       sx={(theme) => ({
@@ -86,10 +89,14 @@ const AdminSideBar = () => {
       <Navbar.Section>
         <Stack justify="center" spacing={0}>
           <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
-          <NavbarLink icon={IconLogout} label="Logout" onClick={() => {
-            localStorage.clear();
-            navigate('/')
-          }} />
+          <NavbarLink
+            icon={IconLogout}
+            label="Logout"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
+          />
         </Stack>
       </Navbar.Section>
     </Navbar>
