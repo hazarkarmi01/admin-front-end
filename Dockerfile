@@ -1,7 +1,7 @@
 FROM node AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --force
 COPY . .
 # RUN npm test - if you want to test before to build
 RUN npm run build
