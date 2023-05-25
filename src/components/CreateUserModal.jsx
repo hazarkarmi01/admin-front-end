@@ -1,4 +1,11 @@
-import { Modal, TextInput, Checkbox, Group, Button } from "@mantine/core";
+import {
+  Modal,
+  TextInput,
+  Checkbox,
+  Group,
+  Button,
+  PasswordInput,
+} from "@mantine/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createUserApi } from "../redux/actions/user.actions";
@@ -57,7 +64,7 @@ const CreateUserModal = ({ handleClose, isOpen }) => {
         name="email"
         onChange={handleChange}
       />
-      <TextInput
+      <PasswordInput
         placeholder="Mot de passe"
         label="Mot de passe"
         withAsterisk
@@ -73,7 +80,12 @@ const CreateUserModal = ({ handleClose, isOpen }) => {
         name="phoneNumber"
         onChange={handleChange}
       />
-      <Checkbox label="Admin" mb={"sm"} checked={isAdmin} onChange={(e) => setIsAdmin(e.currentTarget.checked)} />
+      <Checkbox
+        label="Admin"
+        mb={"sm"}
+        checked={isAdmin}
+        onChange={(e) => setIsAdmin(e.currentTarget.checked)}
+      />
       <Group
         mt="xl"
         align={"flex-end"}
@@ -86,7 +98,7 @@ const CreateUserModal = ({ handleClose, isOpen }) => {
         <Button
           variant="outline"
           onClick={() => {
-            dispatch(createUserApi({...userData,isAdmin}, token));
+            dispatch(createUserApi({ ...userData, isAdmin }, token));
             handleClose();
           }}
         >

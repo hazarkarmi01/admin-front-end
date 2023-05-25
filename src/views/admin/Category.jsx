@@ -7,15 +7,18 @@ import CreateNewCategory from "../../components/CreateNewCategory";
 import {
   deleteCategoryApi,
   getCategoryList,
-  setSelectedCateg
+  setSelectedCateg,
+  updateCategoryName,
 } from "../../redux/actions/category.actions";
 import { searchUser } from "../../redux/actions/user.actions";
 import SubCategoryModal from "../../components/SubCategoryModal";
-import { modals } from '@mantine/modals'
+import { modals } from "@mantine/modals";
+import EditCategory from "../../components/EditCategory";
 const Category = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [openedEdit, setOpenEdit] = useState(false);
   const [subEditOpen, setSubEditOpen] = useState(false);
+  const [localSelected, setLocalSelected] = useState(null);
   const dispatch = useDispatch();
   const { editList } = useSelector((state) => state.category);
   const { token } = useSelector(({ auth }) => auth);
@@ -42,7 +45,7 @@ const Category = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "10px"
+            gap: "10px",
           }}
         >
           <TextInput
@@ -55,6 +58,13 @@ const Category = () => {
         </div>
         <Button onClick={() => open()}>Ajouter nouvelle categorie</Button>
         <CreateNewCategory isOpen={opened} handleClose={close} />
+        <EditCategory
+          categ={localSelected}
+          isOpen={openedEdit}
+          handleClose={() => {
+            setOpenEdit(false);
+          }}
+        />
         <SubCategoryModal
           isOpen={subEditOpen}
           handleClose={() => {
@@ -77,21 +87,25 @@ const Category = () => {
               <CategoryCard
                 category={category.name}
                 subcategories={category.subCategories.length}
-                onEdit={() => console.log(`Edit category ${category.name}`)}
+                onEdit={() => {
+                  setLocalSelected(category);
+                  setOpenEdit(true);
+                }}
                 onDelete={() => {
-                  const openModal = () => modals.openConfirmModal({
-                    title: 'Confirm',
-                    children: (
-                      <Text size="sm">
-                        Est ce que vous voulez supprimer cette categorie
-                      </Text>
-                    ),
-                    labels: { confirm: 'Confirmer', cancel: 'Annuler' },
-                    onCancel: () => console.log('Cancel'),
-                    onConfirm: () => dispatch(deleteCategoryApi(category._id, token)),
-                  });
-                  openModal()
-
+                  const openModal = () =>
+                    modals.openConfirmModal({
+                      title: "Confirm",
+                      children: (
+                        <Text size="sm">
+                          Est ce que vous voulez supprimer cette categorie
+                        </Text>
+                      ),
+                      labels: { confirm: "Confirmer", cancel: "Annuler" },
+                      onCancel: () => console.log("Cancel"),
+                      onConfirm: () =>
+                        dispatch(deleteCategoryApi(category._id, token)),
+                    });
+                  openModal();
                 }}
                 onHandleSub={() => handleManageSub(category)}
               />
